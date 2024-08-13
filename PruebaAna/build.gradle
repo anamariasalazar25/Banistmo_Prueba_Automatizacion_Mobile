@@ -1,0 +1,58 @@
+defaultTasks 'clean', 'test', 'aggregate'
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "net.serenity-bdd:serenity-gradle-plugin:2.4.34"
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: "net.serenity-bdd.serenity-gradle-plugin"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+	selenium_version = "3.141.59"
+	serenity_version = "2.1.4"
+	serenity_cucumber_version = "1.9.51"
+	cucumber_version = "4.2.0"
+}
+
+dependencies {
+	implementation "com.google.inject:guice:4.2.3"
+	testImplementation "junit:junit:4.13.2"
+	implementation "net.serenity-bdd:serenity-core:${serenity_version}"
+	implementation "net.serenity-bdd:serenity-junit:${serenity_version}"
+	implementation "net.serenity-bdd:serenity-screenplay:${serenity_version}"
+	implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenity_version}"
+	implementation "org.seleniumhq.selenium:selenium-chrome-driver:${selenium_version}"
+	//implementation "org.seleniumhq.selenium:selenium-java:${selenium_version}"
+	implementation('org.seleniumhq.selenium:selenium-java:4.20.0') {
+		exclude group: 'org.seleniumhq.selenium', module: 'selenium-chrome-driver'
+		exclude group: 'org.seleniumhq.selenium', module: 'selenium-firefox-driver'
+	}
+	implementation "net.serenity-bdd:serenity-cucumber:${serenity_cucumber_version}"
+	implementation "net.serenity-bdd:serenity-single-page-report:${serenity_version}"
+	implementation "com.sikulix:sikulixapi:2.0.4"
+	implementation 'io.appium:java-client:8.3.0'
+	implementation('org.slf4j:slf4j-api:1.7.36')
+	implementation('ch.qos.logback:logback-classic:1.2.10') {
+		exclude group: 'org.slf4j', module: 'slf4j-nop'
+	}
+}
+configurations.all {
+	exclude group: 'org.slf4j', module: 'slf4j-nop'
+}
